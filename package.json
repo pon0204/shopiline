@@ -7,8 +7,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "db": "docker-compose -f docker-compose.yml",
     "all-install": "yarn install && yarn --cwd frontend install && yarn --cwd backend install",
-    "all-dev": "run-p dev:*",
+    "all-dev": "run-p dev:* \"db up\"",
     "dev:frontend": "yarn --cwd frontend dev",
     "dev:backend": "yarn --cwd backend start:dev"
   },
