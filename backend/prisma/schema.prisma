@@ -9,3 +9,73 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// [設計方針]
+// ① Nullのデータを極力作らない。 データ作成のタイミングでテーブルを分ける。
+
+model Client {
+  id               Int        @id @default(autoincrement())
+  uuid             String     @db.Uuid
+  name             String
+  description      String     @default("")
+  status           String     @default("init")
+  tel              String
+  email            String
+  stripeCustomerid String
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  deleted          DateTime?
+  lineUser         LineUser[]
+}
+
+model LineUser {
+  id            Int       @id @default(autoincrement())
+  uuid          String    @db.Uuid
+  lineId        String
+  lineName      String
+  status        String    @default("active")
+  language      String
+  lineImage     String
+  statusMessage String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deleted       DateTime?
+  profile       Profile?
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      Int
+
+  @@unique([clientId, lineId])
+  @@index([clientId])
+  @@index([lineId])
+  @@index([uuid])
+}
+
+model Profile {
+  name       String
+  nameKana   String
+  image      String
+  gender     GENDER
+  bio        String
+  birthday   String
+  tel        String
+  email      String
+  address1   String
+  address2   String
+  address3   String
+  post_code  String
+  adminMemo  String
+  userMemo   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deleted    DateTime?
+  lineUser   LineUser  @relation(fields: [lineUserId], references: [id])
+  lineUserId Int       @unique
+
+  @@index([lineUserId])
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  OTHERE
+}
