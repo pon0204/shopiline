@@ -49,7 +49,7 @@ CREATE TABLE "Profile" (
     "address1" TEXT NOT NULL,
     "address2" TEXT NOT NULL,
     "address3" TEXT NOT NULL,
-    "post_code" TEXT NOT NULL,
+    "postCode" TEXT NOT NULL,
     "adminMemo" TEXT NOT NULL,
     "userMemo" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

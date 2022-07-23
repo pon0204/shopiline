@@ -62,7 +62,7 @@ model Profile {
   address1   String
   address2   String
   address3   String
-  post_code  String
+  postCode   String
   adminMemo  String
   userMemo   String
   createdAt  DateTime  @default(now())
