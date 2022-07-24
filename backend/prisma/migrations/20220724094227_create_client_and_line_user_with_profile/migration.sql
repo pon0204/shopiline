@@ -26,8 +26,8 @@ CREATE TABLE "LineUser" (
     "lineName" TEXT NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'active',
     "language" TEXT NOT NULL,
-    "lineImage" TEXT NOT NULL,
-    "statusMessage" TEXT NOT NULL,
+    "lineImage" TEXT,
+    "statusMessage" TEXT,
     "stripeCustomerId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -58,6 +58,12 @@ CREATE TABLE "Profile" (
     "deleted" TIMESTAMP(3),
     "lineUserId" INTEGER NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Client_uuid_key" ON "Client"("uuid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "LineUser_uuid_key" ON "LineUser"("uuid");
 
 -- CreateIndex
 CREATE INDEX "LineUser_clientId_idx" ON "LineUser"("clientId");

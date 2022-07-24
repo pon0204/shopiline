@@ -18,7 +18,7 @@ const lineUserData = {
   lineImage: 'imageUrl',
   stripeCustomerId: 'test',
   statusMessage: 'status message',
-  clientId: 5,
+  clientId: 1,
 };
 
 const doSeed = async () => {
@@ -27,7 +27,7 @@ const doSeed = async () => {
   });
 
   const createLineUser = await prisma.lineUser.create({
-    data: { ...lineUserData },
+    data: lineUserData,
   });
 };
 

@@ -13,6 +13,10 @@ datasource db {
 // [設計方針]
 // ① Nullのデータを極力作らない。 データ作成のタイミングでテーブルを分ける。
 
+// [コマンド]
+// npx prisma migrate reset
+// npx prisma migrate dev --name ""
+
 model Client {
   id               Int        @id @default(autoincrement())
   uuid             String     @unique @default(uuid()) @db.Uuid
@@ -35,8 +39,8 @@ model LineUser {
   lineName         String
   status           String    @default("active")
   language         String
-  lineImage        String
-  statusMessage    String
+  lineImage        String?
+  statusMessage    String?
   stripeCustomerId String
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
