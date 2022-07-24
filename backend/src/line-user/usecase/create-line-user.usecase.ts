@@ -12,7 +12,9 @@ export class CreateLineUserUsecase {
     const lineProfile = await this.lineUserRepository.fetchLineProfile(
       testLineUserId,
     );
-    const stripeCustomerId = 'stripeCustomerId';
+    const stripeCustomerId = await this.lineUserRepository.createStripeCustomer(
+      { lineId: lineProfile.userId, lineName: lineProfile.displayName },
+    );
     const lineUser = LineUser.new(lineProfile, clientId, stripeCustomerId);
     return await this.lineUserRepository.create(lineUser);
   }

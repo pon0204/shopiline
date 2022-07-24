@@ -8,17 +8,18 @@ import {
 } from '../domain/interface/line-user.repository';
 import { Profile as LineProfile } from '@line/bot-sdk';
 import { testLineConfig, LineService } from 'src/line/line.service';
+import { StripeService } from '../../stripe/stripe.service';
 
 @Injectable()
 export class LineUserRepository implements ILineUserRepository {
   constructor(
     private prisma: PrismaService,
     private lineService: LineService,
+    private stripeService: StripeService,
   ) {}
   async create(lineUser: TInitialLineUser): Promise<LineUser> {
     const createLineUser: LineUserDBEntity = await this.prisma.lineUser.create({
       data: {
-        clientId: lineUser.clientId,
         lineId: lineUser.lineId,
         lineName: lineUser.lineName,
         lineImage: lineUser.lineImage,
@@ -26,6 +27,11 @@ export class LineUserRepository implements ILineUserRepository {
         language: lineUser.language,
         statusMessage: lineUser.statusMessage,
         stripeCustomerId: lineUser.stripeCustomerId,
+        client: {
+          connect: {
+            id: lineUser.clientId,
+          },
+        },
       },
     });
 
@@ -33,12 +39,20 @@ export class LineUserRepository implements ILineUserRepository {
   }
 
   async fetchLineProfile(lineId: string): Promise<LineProfile> {
-    return this.lineService.getLineProfile(testLineConfig, lineId);
+    return await this.lineService.getLineProfile(testLineConfig, lineId);
   }
 
-  async createStripeCustomer(): Promise<string> {
-    // TODO: stripeAPIServiceから取得する。
-    const stripeCustomerId = '';
-    return stripeCustomerId;
+  async createStripeCustomer({
+    lineId,
+    lineName,
+  }: {
+    lineId: string;
+    lineName: string;
+  }): Promise<string> {
+    const stripeCustomer = await this.stripeService.createStripeCustomer({
+      name: lineName,
+      metadata: { lineId },
+    });
+    return stripeCustomer.id;
   }
 }

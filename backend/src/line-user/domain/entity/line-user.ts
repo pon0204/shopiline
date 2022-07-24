@@ -10,9 +10,9 @@ export class LineUser {
   readonly lineName: string;
   readonly status: string;
   readonly language: string;
-  readonly lineImage: string;
+  readonly lineImage: string | null;
   readonly stripeCustomerId: string;
-  readonly statusMessage: string;
+  readonly statusMessage: string | null;
   readonly profile: Profile | null;
 
   private constructor({
@@ -33,9 +33,9 @@ export class LineUser {
     lineName: string;
     status: string;
     language: string;
-    lineImage: string;
+    lineImage: string | null;
     stripeCustomerId: string;
-    statusMessage: string;
+    statusMessage: string | null;
     profile: Profile | null;
   }) {
     this.id = id;
@@ -59,11 +59,11 @@ export class LineUser {
       clientId,
       lineId: lineProfile.userId,
       lineName: lineProfile.displayName,
-      lineImage: lineProfile.pictureUrl,
+      lineImage: lineProfile?.pictureUrl,
       status: 'active',
       language: lineProfile?.language ?? 'ja',
       stripeCustomerId,
-      statusMessage: lineProfile.statusMessage,
+      statusMessage: lineProfile?.statusMessage,
     };
   }
 

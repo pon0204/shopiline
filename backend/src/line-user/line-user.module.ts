@@ -5,9 +5,10 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { LineUserRepository } from './infra/line-user.repository';
 import { ILineUserRepository } from './domain/interface/line-user.repository';
 import { LineModule } from 'src/line/line.module';
+import { StripeModule } from '../stripe/stripe.module';
 
 @Module({
-  imports: [PrismaModule, LineModule],
+  imports: [PrismaModule, LineModule, StripeModule],
   controllers: [LineUserController],
   providers: [
     CreateLineUserUsecase,

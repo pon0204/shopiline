@@ -17,7 +17,7 @@ export type TLineConfig = {
 export class LineService {
   async getLineProfile(lineConfig: TLineConfig, lineId: string) {
     const lineClient = this.newLineClient(lineConfig);
-    return lineClient.getProfile(lineId);
+    return await lineClient.getProfile(lineId);
   }
 
   private newLineClient(lineConfig: TLineConfig): Client {
