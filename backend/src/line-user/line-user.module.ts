@@ -4,9 +4,10 @@ import { LineUserController } from './presentation/line-user.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { LineUserRepository } from './infra/line-user.repository';
 import { ILineUserRepository } from './domain/interface/line-user.repository';
+import { LineModule } from 'src/line/line.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, LineModule],
   controllers: [LineUserController],
   providers: [
     CreateLineUserUsecase,

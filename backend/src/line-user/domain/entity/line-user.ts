@@ -64,8 +64,3 @@ export class LineUser {
     };
   }
 }
-
-// const lineClient = new Client({
-//   channelAccessToken: '',
-//   channelSecret: '',
-// });

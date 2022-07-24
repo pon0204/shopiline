@@ -17,6 +17,6 @@ export type TInitialLineUser = {
 
 export abstract class ILineUserRepository {
   abstract create(lineUser: TInitialLineUser): Promise<LineUser>;
-  abstract fetchLineProfile(): Promise<LineProfile>;
+  abstract fetchLineProfile(lineId: string): Promise<LineProfile>;
   abstract createStripeCustomer(): Promise<string>;
 }
