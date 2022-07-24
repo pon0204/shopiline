@@ -15,7 +15,7 @@ datasource db {
 
 model Client {
   id               Int        @id @default(autoincrement())
-  uuid             String     @default(uuid()) @db.Uuid
+  uuid             String     @unique @default(uuid()) @db.Uuid
   name             String
   description      String     @default("")
   status           String     @default("init")
@@ -30,7 +30,7 @@ model Client {
 
 model LineUser {
   id               Int       @id @default(autoincrement())
-  uuid             String    @default(uuid()) @db.Uuid
+  uuid             String    @unique @default(uuid()) @db.Uuid
   lineId           String
   lineName         String
   status           String    @default("active")
