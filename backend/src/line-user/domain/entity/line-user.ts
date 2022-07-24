@@ -1,6 +1,7 @@
 import { Profile } from './profile';
 import { Profile as LineProfile } from '@line/bot-sdk';
 import { TInitialLineUser } from '../interface/line-user.repository';
+import { LineUser as LineUserDBEntity } from 'prisma/prisma-client';
 
 export class LineUser {
   readonly id: number;
@@ -12,7 +13,7 @@ export class LineUser {
   readonly lineImage: string;
   readonly stripeCustomerId: string;
   readonly statusMessage: string;
-  readonly profile: Profile;
+  readonly profile: Profile | null;
 
   private constructor({
     id,
@@ -35,7 +36,7 @@ export class LineUser {
     lineImage: string;
     stripeCustomerId: string;
     statusMessage: string;
-    profile: Profile;
+    profile: Profile | null;
   }) {
     this.id = id;
     this.uuid = uuid;
@@ -51,9 +52,11 @@ export class LineUser {
 
   static new(
     lineProfile: LineProfile,
+    clientId: number,
     stripeCustomerId: string,
   ): TInitialLineUser {
     return {
+      clientId,
       lineId: lineProfile.userId,
       lineName: lineProfile.displayName,
       lineImage: lineProfile.pictureUrl,
@@ -62,5 +65,20 @@ export class LineUser {
       stripeCustomerId,
       statusMessage: lineProfile.statusMessage,
     };
+  }
+
+  static reconstruct(lineUser: LineUserDBEntity): LineUser {
+    return new LineUser({
+      id: lineUser.id,
+      uuid: lineUser.uuid,
+      lineId: lineUser.lineId,
+      lineName: lineUser.lineName,
+      status: lineUser.status,
+      language: lineUser.language,
+      lineImage: lineUser.lineImage,
+      stripeCustomerId: lineUser.stripeCustomerId,
+      statusMessage: lineUser.statusMessage,
+      profile: null,
+    });
   }
 }

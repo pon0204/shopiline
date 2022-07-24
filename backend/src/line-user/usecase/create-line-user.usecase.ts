@@ -8,18 +8,12 @@ import { testLineUserId } from 'src/line/line.service';
 @Injectable()
 export class CreateLineUserUsecase {
   constructor(private lineUserRepository: LineUserRepository) {}
-  async handle(lineId: string): Promise<LineUser> {
-    /**
-     * [流れ]
-     * repository層で、でstripeCustomer作成＆取得
-     * domainでentity作成
-     * repositoryでsave
-     */
+  async handle(lineId: string, clientId: number): Promise<LineUser> {
     const lineProfile = await this.lineUserRepository.fetchLineProfile(
       testLineUserId,
     );
     const stripeCustomerId = 'stripeCustomerId';
-    const lineUser = LineUser.new(lineProfile, stripeCustomerId);
+    const lineUser = LineUser.new(lineProfile, clientId, stripeCustomerId);
     return await this.lineUserRepository.create(lineUser);
   }
 }

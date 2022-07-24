@@ -6,6 +6,7 @@ import { Profile as LineProfile } from '@line/bot-sdk';
 // type HasProfile = { readonly profile: Profile };
 
 export type TInitialLineUser = {
+  readonly clientId: number;
   readonly lineId: string;
   readonly lineName: string;
   readonly status: string;

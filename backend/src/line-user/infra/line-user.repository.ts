@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LineUser } from '../domain/entity/line-user';
+import { LineUser as LineUserDBEntity } from 'prisma/prisma-client';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   ILineUserRepository,
@@ -15,7 +16,20 @@ export class LineUserRepository implements ILineUserRepository {
     private lineService: LineService,
   ) {}
   async create(lineUser: TInitialLineUser): Promise<LineUser> {
-    return {} as LineUser;
+    const createLineUser: LineUserDBEntity = await this.prisma.lineUser.create({
+      data: {
+        clientId: lineUser.clientId,
+        lineId: lineUser.lineId,
+        lineName: lineUser.lineName,
+        lineImage: lineUser.lineImage,
+        status: lineUser.status,
+        language: lineUser.language,
+        statusMessage: lineUser.statusMessage,
+        stripeCustomerId: lineUser.stripeCustomerId,
+      },
+    });
+
+    return LineUser.reconstruct(createLineUser);
   }
 
   async fetchLineProfile(lineId: string): Promise<LineProfile> {
