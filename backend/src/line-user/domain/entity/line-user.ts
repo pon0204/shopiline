@@ -1,9 +1,10 @@
 import { Profile } from './profile';
 import { Profile as LineProfile } from '@line/bot-sdk';
+import { TInitialLineUser } from '../interface/line-user.repository';
 
 export class LineUser {
-  readonly id: number | null;
-  readonly uuid: string | null;
+  readonly id: number;
+  readonly uuid: string;
   readonly lineId: string;
   readonly lineName: string;
   readonly status: string;
@@ -11,7 +12,7 @@ export class LineUser {
   readonly lineImage: string;
   readonly stripeCustomerId: string;
   readonly statusMessage: string;
-  readonly profile: Profile | null;
+  readonly profile: Profile;
 
   private constructor({
     id,
@@ -25,8 +26,8 @@ export class LineUser {
     statusMessage,
     profile,
   }: {
-    id: number | null;
-    uuid: string | null;
+    id: number;
+    uuid: string;
     lineId: string;
     lineName: string;
     status: string;
@@ -34,7 +35,7 @@ export class LineUser {
     lineImage: string;
     stripeCustomerId: string;
     statusMessage: string;
-    profile: Profile | null;
+    profile: Profile;
   }) {
     this.id = id;
     this.uuid = uuid;
@@ -48,19 +49,19 @@ export class LineUser {
     this.profile = profile;
   }
 
-  static new(lineProfile: LineProfile, stripeCustomerId: string) {
-    return new LineUser({
-      id: null,
-      uuid: null,
+  static new(
+    lineProfile: LineProfile,
+    stripeCustomerId: string,
+  ): TInitialLineUser {
+    return {
       lineId: lineProfile.userId,
       lineName: lineProfile.displayName,
       lineImage: lineProfile.pictureUrl,
       status: 'active',
-      language: lineProfile.language ?? 'ja',
+      language: lineProfile?.language ?? 'ja',
       stripeCustomerId,
       statusMessage: lineProfile.statusMessage,
-      profile: null,
-    });
+    };
   }
 }
 
