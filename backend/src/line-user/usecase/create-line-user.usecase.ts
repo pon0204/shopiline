@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LineUserRepository } from '../infra/line-user.repository';
-import { TInitialLineUser } from '../domain/interface/line-user.repository';
 import { LineUser } from '../domain/entity/line-user';
-import { Profile } from '@line/bot-sdk';
 import { testLineUserId } from 'src/line/line.service';
 
 @Injectable()
