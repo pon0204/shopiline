@@ -1,5 +1,6 @@
 import { LineUser } from '../entity/line-user';
-import { Profile } from '../entity/profile';
+// import { Profile } from '../entity/profile';
+import { Profile as LineProfile } from '@line/bot-sdk';
 
 // type HasId = { readonly id: number; readonly uuid: string };
 // type HasProfile = { readonly profile: Profile };
@@ -16,5 +17,6 @@ export type TInitialLineUser = {
 
 export abstract class ILineUserRepository {
   abstract create(lineUser: TInitialLineUser): Promise<LineUser>;
-  // abstract save(lineUser: LineUser): Promise<LineUser>;
+  abstract fetchLineProfile(): Promise<LineProfile>;
+  abstract createStripeCustomer(): Promise<string>;
 }
