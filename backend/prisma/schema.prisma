@@ -15,13 +15,13 @@ datasource db {
 
 model Client {
   id               Int        @id @default(autoincrement())
-  uuid             String     @db.Uuid
+  uuid             String     @default(uuid()) @db.Uuid
   name             String
   description      String     @default("")
   status           String     @default("init")
   tel              String
   email            String
-  stripeCustomerid String
+  stripeCustomerId String
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
   deleted          DateTime?
@@ -29,20 +29,21 @@ model Client {
 }
 
 model LineUser {
-  id            Int       @id @default(autoincrement())
-  uuid          String    @db.Uuid
-  lineId        String
-  lineName      String
-  status        String    @default("active")
-  language      String
-  lineImage     String
-  statusMessage String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deleted       DateTime?
-  profile       Profile?
-  client        Client    @relation(fields: [clientId], references: [id])
-  clientId      Int
+  id               Int       @id @default(autoincrement())
+  uuid             String    @default(uuid()) @db.Uuid
+  lineId           String
+  lineName         String
+  status           String    @default("active")
+  language         String
+  lineImage        String
+  statusMessage    String
+  stripeCustomerId String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deleted          DateTime?
+  profile          Profile?
+  client           Client    @relation(fields: [clientId], references: [id])
+  clientId         Int
 
   @@unique([clientId, lineId])
   @@index([clientId])
