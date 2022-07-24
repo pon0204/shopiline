@@ -1,4 +1,4 @@
-import { prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 export async function GetKeyValidationPipe<T>({
   entityName,
