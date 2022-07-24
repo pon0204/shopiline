@@ -15,5 +15,6 @@ export type TInitialLineUser = {
 };
 
 export abstract class ILineUserRepository {
-  abstract save(lineUser: LineUser | TInitialLineUser): Promise<LineUser>;
+  abstract create(lineUser: TInitialLineUser): Promise<LineUser>;
+  // abstract save(lineUser: LineUser): Promise<LineUser>;
 }
