@@ -13,15 +13,19 @@ datasource db {
 // [設計方針]
 // ① Nullのデータを極力作らない。 データ作成のタイミングでテーブルを分ける。
 
+// [コマンド]
+// npx prisma migrate reset
+// npx prisma migrate dev --name ""
+
 model Client {
   id               Int        @id @default(autoincrement())
-  uuid             String     @db.Uuid
+  uuid             String     @unique @default(uuid()) @db.Uuid
   name             String
   description      String     @default("")
   status           String     @default("init")
   tel              String
   email            String
-  stripeCustomerid String
+  stripeCustomerId String
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
   deleted          DateTime?
@@ -29,20 +33,21 @@ model Client {
 }
 
 model LineUser {
-  id            Int       @id @default(autoincrement())
-  uuid          String    @db.Uuid
-  lineId        String
-  lineName      String
-  status        String    @default("active")
-  language      String
-  lineImage     String
-  statusMessage String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deleted       DateTime?
-  profile       Profile?
-  client        Client    @relation(fields: [clientId], references: [id])
-  clientId      Int
+  id               Int       @id @default(autoincrement())
+  uuid             String    @unique @default(uuid()) @db.Uuid
+  lineId           String
+  lineName         String
+  status           String    @default("active")
+  language         String
+  lineImage        String?
+  statusMessage    String?
+  stripeCustomerId String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deleted          DateTime?
+  profile          Profile?
+  client           Client    @relation(fields: [clientId], references: [id])
+  clientId         Int
 
   @@unique([clientId, lineId])
   @@index([clientId])
@@ -62,7 +67,7 @@ model Profile {
   address1   String
   address2   String
   address3   String
-  post_code  String
+  postCode   String
   adminMemo  String
   userMemo   String
   createdAt  DateTime  @default(now())
