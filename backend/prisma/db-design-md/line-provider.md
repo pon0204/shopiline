@@ -3,33 +3,45 @@
 ```mermaid
 erDiagram
 
-client
+client{
+  id number
+}
 
 lineProvider{
-  id number
-  name string
+  id number PK
   clientId number FK
+  name string
+  description string
 }
 
 lineChannel{
+  id number PK
+  lineProviderId number FK
   name string
-  lineProviderId number
+  description string
   channelId string
   channelSecret string
+  accessToken string
+  channelExpire Date
 }
 
 liffChannel{
   id number PK
+  lineProvider number FK
   name string
-  channelId string
-  channelSecret string
+  description string
+  channelId string "unique"
+  channelSecret string "unique"
 }
 
 liffApp{
   id number PK
+  liffId string PK
+  liffChannelId number FK
   name string
-  liffUrl string
+  liffUrl string "論理フィールド"
   endpointUrl string
+  size enum "full・tall・compactのいずれか"
 }
 
 lineChannel_lineUser{
@@ -37,7 +49,9 @@ lineChannel_lineUser{
   lineUserId number PK　"FKも含む"
 }
 
-lineUser
+lineUser{
+  lineProviderId number
+}
 
 client ||--|{ lineProvider :has
 lineProvider ||--o{ lineChannel :has
@@ -57,12 +71,12 @@ liffChannel ||--o{ liffApp :has
 
 - そのユーザーが参加しているイベントを lineProvider 関係なく、横断的に見たい要件が考えられる。
   - user(サービスに対して、一意なユーザー) 1 : 多 lineUser(lineProviderId に紐づくユーザー情報)
-  - 最初から紐付けるのは自動で無理っぽいな。
-  - メールアドレスとパスワードでの管理が必要になってくる
-  - line アカウントの強みがない。
+  - 最初から紐付けるのは自動で無理っぽい。
+    - メールアドレスとパスワードでの管理が必要になってくる
+    - LIFF アプリの強みがなくなる
   - 一意な ID 発行して、サービス用の LINE アカウントで登録すると見れるよ。みたいなのがいいのかも
-  - stripe の CustomerId どうするか問題はある。
+    - stripe の CustomerId どうするか問題はある。
 
 [結論]
 
-- サービスが複雑になるのを防ぐ。Google カレンダーなどに連携するなど別の要件で対応する。
+- サービスが複雑になるのを防ぐためやらない。Google カレンダーなどに連携するなど別の要件で対応する。
