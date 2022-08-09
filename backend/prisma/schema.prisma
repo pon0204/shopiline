@@ -15,39 +15,96 @@ datasource db {
 
 // [コマンド]
 // npx prisma migrate reset
+// npx prisma db push
 // npx prisma migrate dev --name ""
 
 model Client {
-  id               Int        @id @default(autoincrement())
-  uuid             String     @unique @default(uuid()) @db.Uuid
+  id               Int            @id @default(autoincrement())
+  uuid             String         @unique @default(uuid()) @db.Uuid
   name             String
-  description      String     @default("")
-  status           String     @default("init")
+  description      String         @default("")
+  status           String         @default("init")
   tel              String
   email            String
   stripeCustomerId String
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
   deleted          DateTime?
   lineUser         LineUser[]
+  LineProvider     LineProvider[]
+}
+
+model LineProvider {
+  id          Int           @id @default(autoincrement())
+  uuid        String        @unique @default(uuid()) @db.Uuid
+  name        String
+  description String
+  client      Client        @relation(fields: [clientId], references: [id])
+  clientId    Int
+  lineChannel LineChannel[]
+  liffChannel LiffChannel[]
+  LineUser    LineUser[]
+
+  @@index([clientId])
+  @@index([uuid])
+}
+
+model LineChannel {
+  id             Int          @id @default(autoincrement())
+  uuid           String       @unique @default(uuid()) @db.Uuid
+  name           String
+  description    String
+  channelId      String
+  channelSecret  String
+  accessToken    String
+  channelExpire  DateTime
+  lineProvider   LineProvider @relation(fields: [lineProviderId], references: [id])
+  lineProviderId Int
+}
+
+model LiffChannel {
+  id             Int          @id @default(autoincrement())
+  uuid           String       @unique @default(uuid()) @db.Uuid
+  name           String
+  description    String
+  channelId      String
+  channelSecret  String
+  accessToken    String
+  channelExpire  DateTime
+  lineProvider   LineProvider @relation(fields: [lineProviderId], references: [id])
+  lineProviderId Int
+  liffApp        LiffApp[]
+}
+
+model LiffApp {
+  id            Int           @id @default(autoincrement())
+  uuid          String        @unique @default(uuid()) @db.Uuid
+  liffId        String
+  name          String
+  endpointUrl   String
+  size          LIFF_APP_TYPE
+  liffChannel   LiffChannel   @relation(fields: [liffChannelId], references: [id])
+  liffChannelId Int
 }
 
 model LineUser {
-  id               Int       @id @default(autoincrement())
-  uuid             String    @unique @default(uuid()) @db.Uuid
+  id               Int          @id @default(autoincrement())
+  uuid             String       @unique @default(uuid()) @db.Uuid
   lineId           String
   lineName         String
-  status           String    @default("active")
+  status           String       @default("active")
   language         String
   lineImage        String?
   statusMessage    String?
   stripeCustomerId String
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
   deleted          DateTime?
   profile          Profile?
-  client           Client    @relation(fields: [clientId], references: [id])
+  client           Client       @relation(fields: [clientId], references: [id])
   clientId         Int
+  lineProvider     LineProvider @relation(fields: [lineProviderId], references: [id])
+  lineProviderId   Int
 
   @@unique([clientId, lineId])
   @@index([clientId])
@@ -83,4 +140,10 @@ enum GENDER {
   MALE
   FEMALE
   OTHERE
+}
+
+enum LIFF_APP_TYPE {
+  Full
+  Tall
+  Compact
 }
