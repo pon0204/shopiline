@@ -53,6 +53,10 @@ lineUser{
   lineProviderId number
 }
 
+profile{
+  lineUserId number
+}
+
 client ||--|{ lineProvider :has
 lineProvider ||--o{ lineChannel :has
 
@@ -60,6 +64,7 @@ lineProvider ||--o{ liffChannel : has
 lineProvider ||--o{ lineUser : has
 lineChannel ||--o{ lineChannel_lineUser :has
 lineUser ||--o{ lineChannel_lineUser :has
+lineUser ||--|| profile :has
 liffChannel ||--o{ liffApp :has
 
 
