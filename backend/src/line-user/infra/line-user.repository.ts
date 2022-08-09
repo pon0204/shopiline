@@ -32,6 +32,11 @@ export class LineUserRepository implements ILineUserRepository {
             id: lineUser.clientId,
           },
         },
+        lineProvider: {
+          connect: {
+            id: 1,
+          },
+        },
       },
     });
 
